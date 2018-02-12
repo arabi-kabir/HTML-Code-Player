@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Code palyer</title>
+	<meta charset="UTF-8"> 
+	<!--JQuery-->
+	<script type="text/javascript" src="JQuery.js"></script>
+	<script type="text/javascript" src="jquery-ui.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="jquery-ui.css">
+	<!--CSS-->
+	<style type="text/css">
+		body{
+			font-family: sans-serif;
+			padding: 0;
+			margin: 0;
+		}
+		#header{
+			width: 100%;
+			height: 32px;
+			background-color: #34495e;
+			padding: 5px;
+		}
+		#logo{
+			float: left;
+			font-size: 120%;
+			padding: 3px 5px;
+			font-weight: bold;
+		}
+		#buttonContainer{
+			width: 285px;
+			margin: 0 auto;
+			color: black;
+		}
+		.toggleButton{
+			float: left;
+			border: 1px solid grey;
+			padding: 4px 10px;
+			border-right: none;
+			cursor: pointer;
+		}
+		#output{
+			border-right: 1px solid grey;
+		}
+		#html{
+			border-top-left-radius: 5px;
+			border-bottom-left-radius: 5px;
+		}
+		#output{
+			border-top-right-radius: 5px;
+			border-bottom-right-radius: 5px;
+		}
+		.active{
+			background-color: #a7dcb0;
+		}
+		.highlightedButton{
+			background-color: #9b59b6;
+		}
+		textarea{
+			width: 50%;
+			resize: none;
+			margin-top: 0;
+			border-top: none;
+			border-color: grey;
+		}
+		.panel{
+			float: left;
+			border-left: none;
+			border-bottom: none;
+		}
+		iframe{
+			border: 2px solid #d8d8d8;
+		}
+		.hidden{
+			display: none;
+		}
+		
+	</style>
+</head>
+<body>
+
+	<div id="header">
+		<div id="logo">
+			Code player
+		</div>
+			<div id="buttonContainer">
+			<div class="toggleButton active" id="html" >HTML</div>
+			<div class="toggleButton" id="css">CSS</div>
+			<div class="toggleButton" id="javascript">JavaScript</div>
+			<div class="toggleButton active" id="output">Output</div>
+		</div>
+	</div>
+
+	<div id="bodyContainer">
+		<textarea id="htmlPanel" class="panel"><p id="para">Hello</p></textarea>
+		<textarea id="cssPanel" class="panel hidden">p{color:green;}</textarea>
+		<textarea id="javascriptPanel" class="panel hidden">document.getElementById("para").innerHTML ="hello rob";</textarea>
+		<iframe src="" id="outputPanel" class="panel"></iframe>
+	</div>
+
+	
+
+	
+	
+
+	<!--Javasript-->
+	<script type="text/javascript">
+
+		function updateOutput(){
+			$("iframe").contents().find("html").html("<html><head><style type='text/css'>" + $("#cssPanel").val() + "</style></head><body>" + $("#htmlPanel").val() + "</body></html>");
+
+			document.getElementById("outputPanel").contentWindow.eval($("#javascriptPanel").val());
+
+			
+		}
+
+
+		$(".toggleButton").hover(function(){
+			$(this).addClass("highlightedButton");
+		}, function(){
+			$(this).removeClass("highlightedButton");
+		});
+
+		$(".toggleButton").click(function(){
+			$(this).toggleClass("active");
+			$(this).removeClass("highlightedButton");
+
+			var panelId = $(this).attr("id") + "Panel";
+
+			$("#" + panelId).toggleClass("hidden");
+
+			var numberOfActivePanel = 4 - $('.hidden').length;
+
+			$(".panel").width(($(window).width() / numberOfActivePanel) - 7);
+		});
+
+		//$("textarea").height($(window).height() - $("#header").height() - 20);
+		$(".panel").width(($(window).width() / 2) -4);
+		$(".panel").height($(window).height() - $("#header").height() - 12);
+
+		// this will load when page is loaded
+		updateOutput();
+		// change when anything is typed on textarea	
+		$("textarea").on("change keyup paste", function(){
+			updateOutput();
+		});
+	
+	</script>
+</body>
+</html>
